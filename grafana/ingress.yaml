@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/acme-challenge-type: "http01"	
+    cert-manager.io/cluster-issuer: "letsencrypt-grafana"
+spec:
+  rules:
+## Service Location n Characters
+  - host: monitoring.ical.host
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: 3000
+  tls:
+    - hosts:
+      - monitoring.ical.host
+      secretName: grafana-tls
+
